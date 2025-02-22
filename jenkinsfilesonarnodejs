@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+    environment {
+        SONARQUBE_URL = 'http://192.168.111.131:9000'  /* Adjust SonarQube server URL if needed */
+        SONARQUBE_PROJECT_KEY = 'myproject'
+    }
+    stages {
+        stage('Checkout SCM') {
+            steps {
+                script {
+                    checkoutSCM()
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    installDependencies()
+                }
+            }
+        }
+
+        stage('Analyze Code Quality') {
+            steps {
+                script {
+                    analyzeCodeQuality()
+                }
+            }
+        }
+    }
+}
+
+def checkoutSCM() {
+    checkout scm: [
+        $class: 'GitSCM',
+        branches: [[name: '*/master']], 
+        userRemoteConfigs: [[url: 'https://github.com/amitopenwriteup/node-sonar-scanner.git']]
+    ]
+}
+
+def installDependencies() {
+    sh 'npm install'
+    sh 'npm install sonar-scanner'
+}
+
+def analyzeCodeQuality() {
+    withCredentials([string(credentialsId: '5fdd614d-f6e8-4f1f-8154-1a31831301bd', variable: 'SONAR_TOKEN')]) {
+        sh '''
+           npx sonar-scanner \
+           -Dsonar.projectKey="$SONARQUBE_PROJECT_KEY" \
+           -Dsonar.host.url="$SONARQUBE_URL" \
+           -Dsonar.login="$SONAR_TOKEN"
+        '''
+    }
+}
