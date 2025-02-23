@@ -1,0 +1,9 @@
+Enable process
+update the yaml file: /etc/datadog-agent/datadog.yaml
+
+process_config:
+  process_collection:
+    enabled: true
+
+Restart
+systemctl restart datadog-agent
