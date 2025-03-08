@@ -1,0 +1,148 @@
+1)Networking(VPC)
+	4  subnet
+  	2 routing table
+	1 routing table (both private subnet)+don't enable public NAT Gateway
+	2 routing table ( other two subnet+igw)
+	igw (associate with vpc) 
+------------------------------
+
+Terraform part of it:
+	s3 backend?
+	
+	system dir-->s3 bucket + dynamodb (provider block), two rsources s3 + dynadmodb
+
+When you use s3 bucket (10 terraform)-->current state -->Terraform apply (locking will be enabled 
+
+	Lock-->key: value
+	networking dir--> provider+backend (s3bukcet, and key (statefile)
+	VPC-->subnet->igw-->routing-->routing table association
+	sg (443,80,22) key-pair
+	ssh-keygen
+	keypair (public key)
+
+	EC2 instance
+	instance dir-->provider+backend ( only key will change)
+	need data block(fetch datablock)
+	aws_instance type resource (any Linux os)
+---------------------------------
+
+Ansible
+
+---
+- name: Install apache httpd
+  ansible.builtin.apt:
+    name: apache2
+    state: present
+    update_cache: yes
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: files/index.html
+    dest: /var/www/html
+    owner: root
+    group: root
+
+
+----
+
+pipeline {
+agent any
+ stages {
+  stage('Checkout') {
+   steps {
+    // Checkout your Ansible playbook repository
+    git branch: 'main', url: ' https://github.com/amitopenwriteup/tfsource.git'
+   }
+  }
+  stage('Install Ansible') {
+   steps {
+    // Install Ansible on the Jenkins agent
+   sh 'sudo apt-get -y install ansible'
+  }
+ }
+ stage('Run Ansible Playbook') {
+   steps {
+   // Run the Ansible playbook
+  sh 'ansible-playbook -i inventory playbook.yaml'
+  }
+ }
+}
+
+---------------
+
+k8s project
+
+1) pv and pvc
+  static provision
+2) Deployment [1 replica +hpa]: /var/www/html [static provision
+https://www.openwriteup.com/?page_id=996
+
+3) Service [Type LB], LB: NodePort
+
+4) ip of your ubuntu vm
+------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----
+remote exec
+
+ssh
+private key
+public key
+
+
+resource "aws_instance" "example" {
+  ami           = "ami-0b8987a72eee28c3d" # Replace with your desired AMI ID
+  instance_type = "t2.micro"
+  subnet_id     = "subnet-0e09953db95a5ac65" # Replace with your desired subnet ID
+  key_name      = "my-key"                   # Replace with your desired key pair name
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("my-key.pem")
+    host        = self.public_ip
+  }
+  provisioner "remote-exec" {
+    inline = ["sudo apt-get install apache",
+    ]
+  }
+}
+
+
+
+
+
+	
+	
