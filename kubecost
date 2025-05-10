@@ -1,0 +1,29 @@
+cost optimization-->Calcuatlate resource-->plan budge		Kubecost
+  
+			opensource tool for k8s cost monitoring and optimization. IBM. Designed to monitor costing  (resource unlitzation)
+				k8s cluster	ns (Dev,qa,prod) , generate the billing as per names space.
+					ec2 ,storage, network	
+
+				Real time cost management. Promethous collect the real time metrics. H/w resource usage.
+				Alerts, cost (cpu,memory,network and storage)
+				Resource ideal
+				Any kind of costing anamoly detaection (MLOPS)
+				GKE,AZURE,aWS
+				-------------------
+				Components Cost model, cost metrics
+
+				Cost model: Cost analysis engine
+				metrics: Real time cost utization
+				
+				AWS-->EKS-->Cluster will be shared across team 
+				k8s setup and promethous
+				kubecost with cloud billing data
+				
+				----use cases
+					team wide billing (unit wide)
+					underutilized (unused )
+					Anamalies detection: any spike	
+					Cost planning
+
+				--Community editon/Enterpreise editon
+ c	
